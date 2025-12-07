@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+﻿# TaskFlow: Professional Kanban Board
 
-## Getting Started
+A production-ready Kanban task management application built with **Next.js 15**, **TypeScript**, and **Tailwind CSS**. 
 
-First, run the development server:
+This project demonstrates "Senior Intern" capabilities by implementing client-side database persistence (**IndexedDB**), advanced filtering, and a responsive design system inspired by SaaS platforms like Zeda.io.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+##  Live Demo
+**[Insert your Vercel Deployment Link Here]**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+##  Key Features
+* **Kanban Workflow:** Smooth drag-and-drop interface using `@dnd-kit` with collision detection and animations.
+* **Smart Persistence:** Uses **IndexedDB** (via `idb-keyval`) to handle asynchronous data efficiently, ensuring data survives page refreshes.
+* **Advanced Filtering:**
+    * **Global Search:** Real-time filtering by task title.
+    * **Priority Filter:** Dropdown to isolate High/Medium/Low priority tasks.
+* **Dynamic Board Structure:**
+    * **Column Management:** Add new columns via modal or delete existing ones to customize workflows.
+    * **Flexible Task Creation:** Assign tasks to specific columns directly from the global "Add Task" modal.
+* **Enterprise UI:**
+    * **"Zeda-style" Aesthetics:** Clean typography, soft shadows, and status badges.
+    * **Task Metadata:** Footer toolbar showing assignee, priority flags, and dates.
+* **Mobile Responsive:** Features a collapsible sidebar drawer and touch-friendly layouts.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+##  Tech Stack & Decisions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* **Framework:** `Next.js 15 (App Router)` - Chosen for Server Components and latest React features.
+* **Language:** `TypeScript` - Enforced strict typing for `Tasks`, `Columns`, and `Sensors`.
+* **Styling:** `Tailwind CSS` - Used for rapid, responsive design implementation.
+* **State & Storage:** `React Context` + `IndexedDB`. I chose IndexedDB over `localStorage` to demonstrate handling asynchronous browser storage, which mimics real API calls better than synchronous storage.
+* **Drag & Drop:** `@dnd-kit` - Selected for its accessibility features and modularity.
 
-## Learn More
+##  AI Tool Usage Statement
+Per assignment guidelines, I utilized AI tools (GitHub Copilot & ChatGPT) to accelerate development while maintaining code ownership:
+* **Boilerplate:** Generated initial Form layouts and Tailwind class strings.
+* **Logic:** Assisted in implementing the complex "Multi-Filter" logic (combining Search + Priority).
+* **Debugging:** Helped resolve hydration mismatches typical in SSR drag-and-drop implementations.
 
-To learn more about Next.js, take a look at the following resources:
+##  Setup Instructions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/YOUR_USERNAME/kanban-board.git
+    cd kanban-board
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
 
-## Deploy on Vercel
+3.  **Run the development server**
+    ```bash
+    npm run dev
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4.  **Open locally**
+    Visit `http://localhost:3000` in your browser.
