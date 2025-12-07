@@ -1,0 +1,47 @@
+import { useMemo } from 'react';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { Column as ColumnType, Task, Id } from '../types/task';
+import TaskCard from './TaskCard';
+
+interface ColumnProps {
+  column: ColumnType;
+  tasks: Task[];
+  deleteTask: (id: Id) => void;
+  onAddTask: () => void;
+  onEditTask: (task: Task) => void;
+}
+
+export default function Column({ column, tasks, deleteTask, onAddTask, onEditTask }: ColumnProps) {
+  const tasksIds = useMemo(() => tasks.map((task) => task.id), [tasks]);
+
+  return (
+    <div className="w-[350px] h-full flex flex-col bg-gray-100/50 rounded-xl">
+      {/* Header */}
+      <div className="bg-transparent p-4 font-bold flex items-center justify-between flex-shrink-0">
+        <h2 className="text-gray-900 text-base font-semibold">{column.title}</h2>
+        <span className="bg-gray-200 text-gray-700 text-sm rounded-full px-2 py-1 min-w-[24px] text-center">
+          {tasks.length}
+        </span>
+      </div>
+
+      {/* Content Area */}
+      <div className="flex-1 overflow-y-auto flex flex-col gap-4 p-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:hover:bg-gray-400">
+        <SortableContext items={tasksIds} strategy={verticalListSortingStrategy}>
+          {tasks.map((task) => (
+            <TaskCard key={task.id} task={task} deleteTask={deleteTask} onEdit={onEditTask} />
+          ))}
+        </SortableContext>
+      </div>
+
+      {/* Footer */}
+      <div className="p-4 flex-shrink-0">
+        <button
+          onClick={onAddTask}
+          className="w-full p-2 rounded-lg text-gray-500 hover:bg-gray-200 transition-colors duration-200 text-sm font-medium"
+        >
+          + Add Task
+        </button>
+      </div>
+    </div>
+  );
+}
