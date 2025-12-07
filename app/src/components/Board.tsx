@@ -244,7 +244,7 @@ export default function Board() {
           createPortal(
             <DragOverlay>
               {activeTask && (
-                <TaskCard task={activeTask} deleteTask={handleDeleteTask} />
+                <TaskCard task={activeTask} deleteTask={handleDeleteTask} onEdit={handleEditTask} />
               )}
             </DragOverlay>,
             document.body
