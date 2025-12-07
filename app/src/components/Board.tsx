@@ -151,11 +151,6 @@ export default function Board() {
     setEditingTask(null);
   };
 
-  const openAddTask = (columnId: Id) => {
-    setActiveColumnId(columnId);
-    setIsAddTaskOpen(true);
-  };
-
   const onDragStart = (event: DragStartEvent) => {
     if (event.active.data.current?.type === 'Task') {
       setActiveTask(event.active.data.current.task);
