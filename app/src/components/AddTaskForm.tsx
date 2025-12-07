@@ -2,40 +2,47 @@
 
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { Column, Id } from '../types/task';
 
 interface AddTaskFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (taskData: { title: string; description: string; priority: 'low' | 'medium' | 'high' }) => void;
-  initialData?: { title: string; description: string; priority: 'low' | 'medium' | 'high' };
+  onAdd: (taskData: { title: string; description?: string; priority: 'low' | 'medium' | 'high'; columnId: Id }) => void;
+  initialData?: { title: string; description?: string; priority: 'low' | 'medium' | 'high'; columnId?: Id };
+  columns: Column[];
+  defaultColumnId?: Id;
 }
 
-export default function AddTaskForm({ isOpen, onClose, onAdd, initialData }: AddTaskFormProps) {
+export default function AddTaskForm({ isOpen, onClose, onAdd, initialData, columns, defaultColumnId }: AddTaskFormProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium');
+  const [columnId, setColumnId] = useState<Id>(initialData?.columnId ?? defaultColumnId ?? columns[0]?.id ?? '');
 
   useEffect(() => {
     if (initialData) {
       setTitle(initialData.title);
-      setDescription(initialData.description);
+      setDescription(initialData.description ?? '');
       setPriority(initialData.priority);
+      setColumnId(initialData.columnId ?? defaultColumnId ?? columns[0]?.id ?? '');
     } else {
       setTitle('');
       setDescription('');
       setPriority('medium');
+      setColumnId(defaultColumnId ?? columns[0]?.id ?? '');
     }
-  }, [initialData, isOpen]);
+  }, [initialData, isOpen, defaultColumnId, columns]);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim()) {
-      onAdd({ title: title.trim(), description: description.trim(), priority });
+    if (title.trim() && columnId) {
+      onAdd({ title: title.trim(), description: description.trim(), priority, columnId });
       setTitle('');
       setDescription('');
       setPriority('medium');
+      setColumnId(defaultColumnId ?? columns[0]?.id ?? '');
       onClose();
     }
   };
@@ -44,6 +51,7 @@ export default function AddTaskForm({ isOpen, onClose, onAdd, initialData }: Add
     setTitle('');
     setDescription('');
     setPriority('medium');
+    setColumnId(defaultColumnId ?? columns[0]?.id ?? '');
     onClose();
   };
 
@@ -74,7 +82,7 @@ export default function AddTaskForm({ isOpen, onClose, onAdd, initialData }: Add
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-600"
               placeholder="Enter task title"
               autoFocus
             />
@@ -89,10 +97,29 @@ export default function AddTaskForm({ isOpen, onClose, onAdd, initialData }: Add
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none placeholder:text-gray-600"
               placeholder="Enter task description (optional)"
               rows={3}
             />
+          </div>
+
+          {/* Status Select */}
+          <div className="mb-4">
+            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+              Status
+            </label>
+            <select
+              id="status"
+              value={columnId}
+              onChange={(e) => setColumnId(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              {columns.map((column) => (
+                <option key={column.id} value={column.id}>
+                  {column.title}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Priority Select */}

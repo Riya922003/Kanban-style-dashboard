@@ -135,21 +135,19 @@ export default function Board() {
     setIsFormOpen(true);
   };
 
-  const handleAddTask = (taskData: { title: string; description: string; priority: 'low' | 'medium' | 'high' }) => {
+  const handleAddTask = (taskData: { title: string; description?: string; priority: 'low' | 'medium' | 'high'; columnId: Id }) => {
     if (editingTask) {
       // Edit existing task
       setTasks(tasks.map((task) =>
         task.id === editingTask.id
-          ? { ...task, content: taskData.title, description: taskData.description, priority: taskData.priority }
+          ? { ...task, content: taskData.title, description: taskData.description, priority: taskData.priority, columnId: taskData.columnId }
           : task
       ));
     } else {
       // Add new task
-      if (!activeColumn) return;
-
       const newTask: Task = {
         id: uuidv4(),
-        columnId: activeColumn,
+        columnId: taskData.columnId,
         content: taskData.title,
         description: taskData.description,
         priority: taskData.priority,
@@ -285,7 +283,7 @@ export default function Board() {
                 placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg w-48 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm"
+                className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg w-48 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm placeholder:text-gray-600"
               />
             </div>
           </div>
@@ -339,12 +337,15 @@ export default function Board() {
           setEditingTask(null);
         }}
         onAdd={handleAddTask}
+        columns={columns}
+        defaultColumnId={activeColumn ?? columns[0]?.id}
         initialData={
           editingTask
             ? {
                 title: editingTask.content,
-                description: editingTask.description || '',
+                description: editingTask.description,
                 priority: editingTask.priority || 'medium',
+                columnId: editingTask.columnId,
               }
             : undefined
         }
