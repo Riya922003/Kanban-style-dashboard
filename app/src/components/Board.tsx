@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { Search, Filter } from 'lucide-react';
 import {
   DndContext,
   DragOverlay,
@@ -79,6 +80,7 @@ export default function Board() {
   const [activeColumn, setActiveColumn] = useState<Id | null>(null);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -87,6 +89,12 @@ export default function Board() {
       },
     })
   );
+
+  // Filter tasks based on search query
+  const filteredTasks = tasks.filter((task) => {
+    if (!searchQuery) return true;
+    return task.content.toLowerCase().includes(searchQuery.toLowerCase());
+  });
 
   // Load tasks from IndexedDB on mount
   useEffect(() => {
@@ -218,8 +226,58 @@ export default function Board() {
     );
   }
 
+  const columnColors = {
+    todo: 'bg-blue-500',
+    inprogress: 'bg-yellow-500',
+    done: 'bg-green-500',
+  };
+
   return (
-    <>
+    <div className="flex flex-col h-full">
+      {/* Header Section */}
+      <div className="flex-shrink-0 mb-6">
+        {/* Title Row */}
+        <h1 className="text-2xl font-bold text-gray-900">Kanban Board</h1>
+
+        {/* Stats Row */}
+        <div className="flex gap-4 mt-4">
+          {COLUMNS.map((column) => {
+            const count = tasks.filter((task) => task.columnId === column.id).length;
+            return (
+              <div
+                key={column.id}
+                className="bg-white border border-gray-200 rounded-full px-4 py-1 text-sm font-medium flex items-center gap-2"
+              >
+                <div className={`w-2 h-2 rounded-full ${columnColors[column.id as keyof typeof columnColors]}`} />
+                <span>{column.title}</span>
+                <span className="text-gray-500">{count}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Toolbar Row */}
+        <div className="flex justify-between items-center mt-6 mb-6">
+          {/* Left - Search */}
+          <div className="relative">
+            <Search className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-64 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            />
+          </div>
+
+          {/* Right - Action */}
+          <button className="bg-white border border-gray-300 flex gap-2 items-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+            <Filter className="w-4 h-4" />
+            <span>Filter</span>
+          </button>
+        </div>
+      </div>
+
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
@@ -227,12 +285,12 @@ export default function Board() {
         onDragOver={onDragOver}
         onDragEnd={onDragEnd}
       >
-        <div className="flex h-full w-full gap-8 overflow-x-auto items-start justify-center p-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+        <div className="flex flex-1 w-full gap-8 overflow-x-auto items-start justify-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] min-h-0">
           {COLUMNS.map((column) => (
             <Column
               key={column.id}
               column={column}
-              tasks={tasks.filter((task) => task.columnId === column.id)}
+              tasks={filteredTasks.filter((task) => task.columnId === column.id)}
               deleteTask={handleDeleteTask}
               onAddTask={() => openTaskForm(column.id)}
               onEditTask={handleEditTask}
@@ -268,6 +326,6 @@ export default function Board() {
             : undefined
         }
       />
-    </>
+    </div>
   );
 }
