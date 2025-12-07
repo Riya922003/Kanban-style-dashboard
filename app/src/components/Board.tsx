@@ -84,6 +84,7 @@ export default function Board() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterPriority, setFilterPriority] = useState<'all' | 'low' | 'medium' | 'high'>('all');
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -93,10 +94,11 @@ export default function Board() {
     })
   );
 
-  // Filter tasks based on search query
+  // Filter tasks based on search query and priority
   const filteredTasks = tasks.filter((task) => {
-    if (!searchQuery) return true;
-    return task.content.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = !searchQuery || task.content.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesPriority = filterPriority === 'all' || task.priority === filterPriority;
+    return matchesSearch && matchesPriority;
   });
 
   // Load tasks from IndexedDB on mount
@@ -296,6 +298,16 @@ export default function Board() {
                 className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg w-48 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm placeholder:text-gray-600 text-gray-600"
               />
             </div>
+            <select
+              value={filterPriority}
+              onChange={(e) => setFilterPriority(e.target.value as 'all' | 'low' | 'medium' | 'high')}
+              className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white text-gray-600"
+            >
+              <option value="all">All Priorities</option>
+              <option value="high">High Priority</option>
+              <option value="medium">Medium Priority</option>
+              <option value="low">Low Priority</option>
+            </select>
           </div>
 
           {/* Right - Add Task */}

@@ -17,7 +17,7 @@ export default function Column({ column, tasks, deleteTask, onAddTask, onEditTas
   const tasksIds = useMemo(() => tasks.map((task) => task.id), [tasks]);
 
   return (
-    <div className="w-[350px] h-full flex flex-col bg-gray-100/50 rounded-xl">
+    <div className="w-[350px] h-full flex flex-col bg-gray-200/60 rounded-xl">
       {/* Header */}
       <div className="bg-white border border-gray-200 rounded-t-xl p-4 font-bold flex items-center justify-between flex-shrink-0">
         <h2 className="text-gray-900 text-base font-semibold">{column.title}</h2>
