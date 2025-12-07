@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { Ghost } from 'lucide-react';
 import { Column as ColumnType, Task, Id } from '../types/task';
 import TaskCard from './TaskCard';
 
@@ -27,9 +28,16 @@ export default function Column({ column, tasks, deleteTask, onAddTask, onEditTas
       {/* Content Area */}
       <div className="flex-1 overflow-y-auto flex flex-col gap-4 p-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:hover:bg-gray-400">
         <SortableContext items={tasksIds} strategy={verticalListSortingStrategy}>
-          {tasks.map((task) => (
-            <TaskCard key={task.id} task={task} deleteTask={deleteTask} onEdit={onEditTask} />
-          ))}
+          {tasks.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50/50 text-gray-400">
+              <Ghost className="w-10 h-10 mb-2" />
+              <p className="text-sm font-medium">No tasks yet</p>
+            </div>
+          ) : (
+            tasks.map((task) => (
+              <TaskCard key={task.id} task={task} deleteTask={deleteTask} onEdit={onEditTask} />
+            ))
+          )}
         </SortableContext>
       </div>
 

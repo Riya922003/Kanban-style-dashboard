@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, Plus, Columns as ColumnsIcon } from 'lucide-react';
 import {
   DndContext,
   DragOverlay,
@@ -67,7 +67,7 @@ const INITIAL_TASKS: Task[] = [
   },
 ];
 
-const COLUMNS: ColumnType[] = [
+const INITIAL_COLUMNS: ColumnType[] = [
   { id: 'todo', title: 'To Do' },
   { id: 'inprogress', title: 'In Progress' },
   { id: 'done', title: 'Done' },
@@ -75,6 +75,7 @@ const COLUMNS: ColumnType[] = [
 
 export default function Board() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [columns, setColumns] = useState<ColumnType[]>(INITIAL_COLUMNS);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [activeColumn, setActiveColumn] = useState<Id | null>(null);
@@ -159,6 +160,14 @@ export default function Board() {
     setEditingTask(null);
   };
 
+  const createNewColumn = () => {
+    const newColumn: ColumnType = {
+      id: uuidv4(),
+      title: `Column ${columns.length + 1}`,
+    };
+    setColumns([...columns, newColumn]);
+  };
+
   const onDragStart = (event: DragStartEvent) => {
     if (event.active.data.current?.type === 'Task') {
       setActiveTask(event.active.data.current.task);
@@ -241,16 +250,18 @@ export default function Board() {
 
         {/* Stats Row */}
         <div className="flex gap-4 mt-4">
-          {COLUMNS.map((column) => {
+          {columns.map((column) => {
             const count = tasks.filter((task) => task.columnId === column.id).length;
+            const colorKey = column.id as keyof typeof columnColors;
+            const dotColor = columnColors[colorKey] || 'bg-gray-500';
             return (
               <div
                 key={column.id}
                 className="bg-white border border-gray-200 rounded-full px-4 py-1 text-sm font-medium flex items-center gap-2"
               >
-                <div className={`w-2 h-2 rounded-full ${columnColors[column.id as keyof typeof columnColors]}`} />
-                <span>{column.title}</span>
-                <span className="text-gray-500">{count}</span>
+                <div className={`w-2 h-2 rounded-full ${dotColor}`} />
+                <span className="text-gray-900">{column.title}</span>
+                <span className="text-gray-900">{count}</span>
               </div>
             );
           })}
@@ -258,22 +269,34 @@ export default function Board() {
 
         {/* Toolbar Row */}
         <div className="flex justify-between items-center mt-6 mb-6">
-          {/* Left - Search */}
-          <div className="relative">
-            <Search className="absolute left-3 top-2.5 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search tasks..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-64 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-            />
+          {/* Left - Add Item and Search */}
+          <div className="flex gap-3 items-center">
+            <button 
+              onClick={createNewColumn}
+              className="bg-indigo-600 text-white flex gap-2 items-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Item</span>
+            </button>
+            <div className="relative">
+              <Search className="absolute left-3 top-2.5 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg w-48 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm"
+              />
+            </div>
           </div>
 
-          {/* Right - Action */}
-          <button className="bg-white border border-gray-300 flex gap-2 items-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
-            <Filter className="w-4 h-4" />
-            <span>Filter</span>
+          {/* Right - Add Task */}
+          <button 
+            onClick={() => openTaskForm(columns[0]?.id)}
+            className="bg-indigo-600 text-white flex gap-2 items-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Task</span>
           </button>
         </div>
       </div>
@@ -286,7 +309,7 @@ export default function Board() {
         onDragEnd={onDragEnd}
       >
         <div className="flex flex-1 w-full gap-8 overflow-x-auto items-start justify-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] min-h-0">
-          {COLUMNS.map((column) => (
+          {columns.map((column) => (
             <Column
               key={column.id}
               column={column}
