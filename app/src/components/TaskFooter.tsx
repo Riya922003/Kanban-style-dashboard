@@ -6,22 +6,14 @@ interface TaskFooterProps {
 
 export default function TaskFooter({ priority = 'medium' }: TaskFooterProps) {
   // Determine flag color based on priority
-  const getFlagColor = () => {
-    switch (priority) {
-      case 'high':
-        return 'text-red-500';
-      case 'medium':
-        return 'text-yellow-500';
-      case 'low':
-        return 'text-blue-500';
-      default:
-        return 'text-gray-400';
-    }
-  };
+  const flagColor = 
+    priority === 'high' ? 'text-red-500' :
+    priority === 'medium' ? 'text-yellow-500' :
+    'text-blue-500';
 
   return (
     <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-      {/* Left Side - Assignee */}
+      {/* Left Side - Assignee Avatar */}
       <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold">
         JD
       </div>
@@ -29,7 +21,7 @@ export default function TaskFooter({ priority = 'medium' }: TaskFooterProps) {
       {/* Right Side - Meta Icons */}
       <div className="flex items-center gap-3 text-gray-400">
         {/* Priority Flag */}
-        <Flag size={14} className={getFlagColor()} />
+        <Flag size={14} className={flagColor} />
 
         {/* Date */}
         <div className="flex items-center gap-1 text-xs">

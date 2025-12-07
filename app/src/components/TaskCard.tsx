@@ -2,6 +2,7 @@ import { Trash2, Pencil, FileText } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Task, Id } from '../types/task';
+import TaskFooter from './TaskFooter';
 
 interface TaskCardProps {
   task: Task;
@@ -93,6 +94,9 @@ export default function TaskCard({ task, deleteTask, onEdit }: TaskCardProps) {
           </span>
         </div>
       )}
+
+      {/* Task Footer */}
+      <TaskFooter priority={task.priority} />
     </div>
   );
 }

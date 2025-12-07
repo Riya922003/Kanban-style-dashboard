@@ -20,6 +20,7 @@ import { Task, Column as ColumnType, Id } from '../types/task';
 import Column from './Column';
 import TaskCard from './TaskCard';
 import AddTaskForm from './AddTaskForm';
+import AddColumnForm from './AddColumnForm';
 import { getTasks, saveTasks } from '../lib/storage';
 
 const INITIAL_TASKS: Task[] = [
@@ -78,6 +79,7 @@ export default function Board() {
   const [columns, setColumns] = useState<ColumnType[]>(INITIAL_COLUMNS);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isColumnFormOpen, setIsColumnFormOpen] = useState(false);
   const [activeColumn, setActiveColumn] = useState<Id | null>(null);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -158,12 +160,20 @@ export default function Board() {
     setEditingTask(null);
   };
 
-  const createNewColumn = () => {
+  const handleAddColumn = (title: string) => {
     const newColumn: ColumnType = {
       id: uuidv4(),
-      title: `Column ${columns.length + 1}`,
+      title: title,
     };
     setColumns([...columns, newColumn]);
+    setIsColumnFormOpen(false);
+  };
+
+  const deleteColumn = (columnId: Id) => {
+    // Remove the column
+    setColumns(columns.filter((col) => col.id !== columnId));
+    // Remove all tasks belonging to this column to prevent orphaned data
+    setTasks(tasks.filter((task) => task.columnId !== columnId));
   };
 
   const onDragStart = (event: DragStartEvent) => {
@@ -270,7 +280,7 @@ export default function Board() {
           {/* Left - Add Item and Search */}
           <div className="flex gap-3 items-center">
             <button 
-              onClick={createNewColumn}
+              onClick={() => setIsColumnFormOpen(true)}
               className="bg-indigo-600 text-white flex gap-2 items-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
@@ -315,6 +325,7 @@ export default function Board() {
               deleteTask={handleDeleteTask}
               onAddTask={() => openTaskForm(column.id)}
               onEditTask={handleEditTask}
+              onDeleteColumn={deleteColumn}
             />
           ))}
         </div>
@@ -349,6 +360,12 @@ export default function Board() {
               }
             : undefined
         }
+      />
+
+      <AddColumnForm
+        isOpen={isColumnFormOpen}
+        onClose={() => setIsColumnFormOpen(false)}
+        onAdd={handleAddColumn}
       />
     </div>
   );

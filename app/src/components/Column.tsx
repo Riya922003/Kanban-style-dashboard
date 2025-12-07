@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Ghost } from 'lucide-react';
+import { Ghost, Trash2 } from 'lucide-react';
 import { Column as ColumnType, Task, Id } from '../types/task';
 import TaskCard from './TaskCard';
 
@@ -10,9 +10,10 @@ interface ColumnProps {
   deleteTask: (id: Id) => void;
   onAddTask: () => void;
   onEditTask: (task: Task) => void;
+  onDeleteColumn: (id: Id) => void;
 }
 
-export default function Column({ column, tasks, deleteTask, onAddTask, onEditTask }: ColumnProps) {
+export default function Column({ column, tasks, deleteTask, onAddTask, onEditTask, onDeleteColumn }: ColumnProps) {
   const tasksIds = useMemo(() => tasks.map((task) => task.id), [tasks]);
 
   return (
@@ -20,9 +21,18 @@ export default function Column({ column, tasks, deleteTask, onAddTask, onEditTas
       {/* Header */}
       <div className="bg-transparent p-4 font-bold flex items-center justify-between flex-shrink-0">
         <h2 className="text-gray-900 text-base font-semibold">{column.title}</h2>
-        <span className="bg-gray-200 text-gray-700 text-sm rounded-full px-2 py-1 min-w-[24px] text-center">
-          {tasks.length}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="bg-gray-200 text-gray-700 text-sm rounded-full px-2 py-1 min-w-[24px] text-center">
+            {tasks.length}
+          </span>
+          <button
+            onClick={() => onDeleteColumn(column.id)}
+            className="text-gray-400 hover:text-red-500 p-1 transition-colors duration-200 rounded hover:bg-red-50"
+            aria-label="Delete column"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* Content Area */}
