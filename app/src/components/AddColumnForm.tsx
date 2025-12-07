@@ -55,7 +55,7 @@ export default function AddColumnForm({ isOpen, onClose, onAdd }: AddColumnFormP
               id="columnTitle"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-600"
+              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-600 text-gray-600"
               placeholder="Enter column title"
               autoFocus
             />

@@ -82,7 +82,7 @@ export default function AddTaskForm({ isOpen, onClose, onAdd, initialData, colum
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-600"
+              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-600 text-gray-600"
               placeholder="Enter task title"
               autoFocus
             />
@@ -97,7 +97,7 @@ export default function AddTaskForm({ isOpen, onClose, onAdd, initialData, colum
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none placeholder:text-gray-600"
+              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none placeholder:text-gray-600 text-gray-600"
               placeholder="Enter task description (optional)"
               rows={3}
             />
@@ -112,7 +112,7 @@ export default function AddTaskForm({ isOpen, onClose, onAdd, initialData, colum
               id="status"
               value={columnId}
               onChange={(e) => setColumnId(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
             >
               {columns.map((column) => (
                 <option key={column.id} value={column.id}>
@@ -131,7 +131,7 @@ export default function AddTaskForm({ isOpen, onClose, onAdd, initialData, colum
               id="priority"
               value={priority}
               onChange={(e) => setPriority(e.target.value as 'low' | 'medium' | 'high')}
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
             >
               <option value="low">Low</option>
               <option value="medium">Medium</option>

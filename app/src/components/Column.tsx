@@ -19,7 +19,7 @@ export default function Column({ column, tasks, deleteTask, onAddTask, onEditTas
   return (
     <div className="w-[350px] h-full flex flex-col bg-gray-100/50 rounded-xl">
       {/* Header */}
-      <div className="bg-transparent p-4 font-bold flex items-center justify-between flex-shrink-0">
+      <div className="bg-white border border-gray-200 rounded-t-xl p-4 font-bold flex items-center justify-between flex-shrink-0">
         <h2 className="text-gray-900 text-base font-semibold">{column.title}</h2>
         <div className="flex items-center gap-2">
           <span className="bg-gray-200 text-gray-700 text-sm rounded-full px-2 py-1 min-w-[24px] text-center">
