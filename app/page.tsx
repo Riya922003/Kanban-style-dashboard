@@ -6,7 +6,7 @@ import Board from './src/components/Board';
 import Sidebar from './src/components/Sidebar';
 
 export default function Home() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const closeSidebar = () => setIsSidebarOpen(false);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -19,12 +19,19 @@ export default function Home() {
       {/* Right Side */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="h-16 bg-white border-b border-gray-200 flex items-center px-6 flex-shrink-0">
+        <div className="h-16 bg-white border-b border-gray-200 flex items-center px-4 md:px-6 flex-shrink-0">
+          <button
+            onClick={toggleSidebar}
+            className="mr-3 md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+            aria-label="Toggle menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
           <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
         </div>
 
         {/* Board Area */}
-        <div className="flex-1 overflow-hidden p-6">
+        <div className="flex-1 overflow-hidden p-2 md:p-6">
           <Board />
         </div>
       </div>

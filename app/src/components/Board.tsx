@@ -85,6 +85,7 @@ export default function Board() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterPriority, setFilterPriority] = useState<'all' | 'low' | 'medium' | 'high'>('all');
+  const [activeMobileColumn, setActiveMobileColumn] = useState<Id | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -122,6 +123,13 @@ export default function Board() {
       saveTasks(tasks);
     }
   }, [tasks, isLoading]);
+
+  // Set active mobile column to first column on mount or when columns change
+  useEffect(() => {
+    if (activeMobileColumn === null && columns.length > 0) {
+      setActiveMobileColumn(columns[0].id);
+    }
+  }, [columns, activeMobileColumn]);
 
   const handleDeleteTask = (id: Id) => {
     setTasks(tasks.filter((task) => task.id !== id));
@@ -254,12 +262,12 @@ export default function Board() {
   return (
     <div className="flex flex-col h-full">
       {/* Header Section */}
-      <div className="flex-shrink-0 mb-6">
+      <div className="flex-shrink-0 mb-4 md:mb-6 px-2 md:px-0">
         {/* Title Row */}
-        <h1 className="text-2xl font-bold text-gray-900">Kanban Board</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900">Kanban Board</h1>
 
         {/* Stats Row */}
-        <div className="flex gap-4 mt-4">
+        <div className="flex gap-2 md:gap-4 mt-3 md:mt-4 overflow-x-auto pb-2">
           {columns.map((column) => {
             const count = tasks.filter((task) => task.columnId === column.id).length;
             const colorKey = column.id as keyof typeof columnColors;
@@ -267,7 +275,7 @@ export default function Board() {
             return (
               <div
                 key={column.id}
-                className="bg-white border border-gray-200 rounded-full px-4 py-1 text-sm font-medium flex items-center gap-2"
+                className="bg-white border border-gray-200 rounded-full px-3 md:px-4 py-1 text-xs md:text-sm font-medium flex items-center gap-2 whitespace-nowrap flex-shrink-0"
               >
                 <div className={`w-2 h-2 rounded-full ${dotColor}`} />
                 <span className="text-gray-900">{column.title}</span>
@@ -278,12 +286,19 @@ export default function Board() {
         </div>
 
         {/* Toolbar Row */}
-        <div className="flex justify-between items-center mt-6 mb-6">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center mt-4 md:mt-6 mb-4 md:mb-6 gap-3">
           {/* Left - Add Item and Search */}
-          <div className="flex gap-3 items-center">
+          <div className="flex flex-col md:flex-row gap-2 md:gap-3 items-stretch md:items-center">
             <button 
               onClick={() => setIsColumnFormOpen(true)}
-              className="bg-indigo-600 text-white flex gap-2 items-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+              className="bg-indigo-600 text-white flex gap-2 items-center justify-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors md:hidden"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Item</span>
+            </button>
+            <button 
+              onClick={() => setIsColumnFormOpen(true)}
+              className="hidden md:flex bg-indigo-600 text-white gap-2 items-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
               <span>Add Item</span>
@@ -295,7 +310,7 @@ export default function Board() {
                 placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg w-48 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm placeholder:text-gray-600 text-gray-600"
+                className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg w-full md:w-48 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm placeholder:text-gray-600 text-gray-600"
               />
             </div>
             <select
@@ -313,12 +328,32 @@ export default function Board() {
           {/* Right - Add Task */}
           <button 
             onClick={() => openTaskForm(columns[0]?.id)}
-            className="bg-indigo-600 text-white flex gap-2 items-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+            className="bg-indigo-600 text-white flex gap-2 items-center justify-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span>Add Task</span>
           </button>
         </div>
+      </div>
+
+      {/* Mobile Tabs */}
+      <div className="flex gap-2 overflow-x-auto pb-3 mb-3 md:hidden snap-x px-2">
+        {columns.map((col) => {
+          const count = tasks.filter((task) => task.columnId === col.id).length;
+          return (
+            <button
+              key={col.id}
+              onClick={() => setActiveMobileColumn(col.id)}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap snap-center border transition-colors flex items-center gap-2 ${
+                activeMobileColumn === col.id
+                  ? 'bg-indigo-600 text-white border-indigo-600'
+                  : 'bg-white text-gray-700 border-gray-200'
+              }`}
+            >
+              {col.title} ({count})
+            </button>
+          );
+        })}
       </div>
 
       <DndContext
@@ -328,17 +363,23 @@ export default function Board() {
         onDragOver={onDragOver}
         onDragEnd={onDragEnd}
       >
-        <div className="flex flex-1 w-full gap-8 overflow-x-auto items-start justify-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] min-h-0">
+        <div className="flex flex-col md:flex-row flex-1 w-full md:gap-8 md:overflow-x-auto items-stretch md:justify-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] min-h-0 px-2 md:p-4">
           {columns.map((column) => (
-            <Column
+            <div
               key={column.id}
-              column={column}
-              tasks={filteredTasks.filter((task) => task.columnId === column.id)}
-              deleteTask={handleDeleteTask}
-              onAddTask={() => openTaskForm(column.id)}
-              onEditTask={handleEditTask}
-              onDeleteColumn={deleteColumn}
-            />
+              className={`w-full md:w-[350px] h-full flex-shrink-0 ${
+                activeMobileColumn === column.id ? 'flex' : 'hidden md:flex'
+              }`}
+            >
+              <Column
+                column={column}
+                tasks={filteredTasks.filter((task) => task.columnId === column.id)}
+                deleteTask={handleDeleteTask}
+                onAddTask={() => openTaskForm(column.id)}
+                onEditTask={handleEditTask}
+                onDeleteColumn={deleteColumn}
+              />
+            </div>
           ))}
         </div>
 

@@ -9,11 +9,20 @@ interface SidebarProps {
 export default function Sidebar({ isOpen, onClose, onToggle }: SidebarProps) {
   return (
     <>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
+      
       {/* Sidebar */}
       <aside
-        className={`relative bg-white border-r border-gray-200 flex flex-col transition-all duration-200 ease-in-out h-screen ${
-          isOpen ? 'w-64' : 'w-16'
-        }`}
+        className={`fixed md:relative bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ease-in-out h-screen z-50 ${
+          isOpen ? 'w-64' : 'w-16 -translate-x-full md:translate-x-0'
+        } md:translate-x-0`}
       >
         {/* Top - Logo */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-gray-100">
