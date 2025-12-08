@@ -65,7 +65,7 @@ export default function TaskCard({ task, deleteTask, onEdit }: TaskCardProps) {
               e.stopPropagation();
               onEdit(task);
             }}
-            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-gray-400 hover:text-blue-500 p-1 rounded hover:bg-blue-50"
+            className="md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 text-gray-400 hover:text-blue-500 p-1 rounded hover:bg-blue-50"
             aria-label="Edit task"
           >
             <Pencil className="w-4 h-4" />
@@ -75,7 +75,7 @@ export default function TaskCard({ task, deleteTask, onEdit }: TaskCardProps) {
               e.stopPropagation();
               deleteTask(task.id);
             }}
-            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-gray-400 hover:text-red-500 p-1 rounded hover:bg-red-50"
+            className="md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 text-gray-400 hover:text-red-500 p-1 rounded hover:bg-red-50"
             aria-label="Delete task"
           >
             <Trash2 className="w-4 h-4" />
