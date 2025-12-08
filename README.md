@@ -1,4 +1,5 @@
-﻿# TaskFlow: Professional Kanban Board
+![TaskFlow Banner](public/images/banner.png)
+ # TaskFlow: Professional Kanban Board
 
 A production-ready Kanban task management application built with **Next.js 15**, **TypeScript**, and **Tailwind CSS**. 
 
