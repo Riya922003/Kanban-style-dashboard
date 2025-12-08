@@ -1,10 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { Menu } from 'lucide-react';
 import Board from './src/components/Board';
 import Sidebar from './src/components/Sidebar';
-import ThemeToggle from './src/components/ThemeToggle';
+
+const ThemeToggle = dynamic(() => import('./src/components/ThemeToggle'), {
+  ssr: false,
+  loading: () => <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 w-9 h-9" />
+});
 
 export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
