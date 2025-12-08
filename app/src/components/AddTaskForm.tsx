@@ -57,13 +57,13 @@ export default function AddTaskForm({ isOpen, onClose, onAdd, initialData, colum
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white w-96 p-6 rounded-xl shadow-xl">
+      <div className="bg-white dark:bg-gray-900 w-96 p-6 rounded-xl shadow-xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-900">{initialData ? 'Edit Task' : 'Add New Task'}</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">{initialData ? 'Edit Task' : 'Add New Task'}</h2>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded hover:bg-gray-100"
+            className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -74,7 +74,7 @@ export default function AddTaskForm({ isOpen, onClose, onAdd, initialData, colum
         <form onSubmit={handleSubmit}>
           {/* Title Input */}
           <div className="mb-4">
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Title
             </label>
             <input
@@ -82,7 +82,7 @@ export default function AddTaskForm({ isOpen, onClose, onAdd, initialData, colum
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-600 text-gray-600"
+              className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-600 dark:placeholder:text-gray-400 text-gray-600 dark:text-gray-300"
               placeholder="Enter task title"
               autoFocus
             />
@@ -90,14 +90,14 @@ export default function AddTaskForm({ isOpen, onClose, onAdd, initialData, colum
 
           {/* Description Textarea */}
           <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Description
             </label>
             <textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none placeholder:text-gray-600 text-gray-600"
+              className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none placeholder:text-gray-600 dark:placeholder:text-gray-400 text-gray-600 dark:text-gray-300"
               placeholder="Enter task description (optional)"
               rows={3}
             />

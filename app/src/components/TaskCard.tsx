@@ -43,17 +43,17 @@ export default function TaskCard({ task, deleteTask, onEdit }: TaskCardProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className={`group bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:ring-2 hover:ring-blue-500 hover:shadow-md transition-all duration-200 cursor-pointer ${
-        isDragging ? 'opacity-30 border-2 border-rose-500' : ''
+      className={`group bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:ring-2 hover:ring-blue-500 dark:hover:ring-blue-400 hover:shadow-md transition-all duration-200 cursor-pointer ${
+        isDragging ? 'opacity-30 border-2 border-rose-500 dark:border-rose-400' : ''
       }`}
     >
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="flex-1">
-          <h3 className="text-sm font-medium text-gray-900">
+          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
             {task.content}
           </h3>
           {task.description && (
-            <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
+            <div className="flex items-center gap-1 mt-1 text-xs text-gray-500 dark:text-gray-400">
               <FileText className="w-3 h-3" />
               <span>Has description</span>
             </div>
@@ -65,7 +65,7 @@ export default function TaskCard({ task, deleteTask, onEdit }: TaskCardProps) {
               e.stopPropagation();
               onEdit(task);
             }}
-            className="md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 text-gray-400 hover:text-blue-500 p-1 rounded hover:bg-blue-50"
+            className="md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 text-gray-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20"
             aria-label="Edit task"
           >
             <Pencil className="w-4 h-4" />
@@ -75,7 +75,7 @@ export default function TaskCard({ task, deleteTask, onEdit }: TaskCardProps) {
               e.stopPropagation();
               deleteTask(task.id);
             }}
-            className="md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 text-gray-400 hover:text-red-500 p-1 rounded hover:bg-red-50"
+            className="md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
             aria-label="Delete task"
           >
             <Trash2 className="w-4 h-4" />

@@ -264,7 +264,7 @@ export default function Board() {
       {/* Header Section */}
       <div className="flex-shrink-0 mb-4 md:mb-6 px-2 md:px-0">
         {/* Title Row */}
-        <h1 className="text-xl md:text-2xl font-bold text-gray-900">Kanban Board</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Kanban Board</h1>
 
         {/* Stats Row */}
         <div className="flex gap-2 md:gap-4 mt-3 md:mt-4 overflow-x-auto pb-2">
@@ -275,11 +275,11 @@ export default function Board() {
             return (
               <div
                 key={column.id}
-                className="bg-white border border-gray-200 rounded-full px-3 md:px-4 py-1 text-xs md:text-sm font-medium flex items-center gap-2 whitespace-nowrap flex-shrink-0"
+                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full px-3 md:px-4 py-1 text-xs md:text-sm font-medium flex items-center gap-2 whitespace-nowrap flex-shrink-0"
               >
                 <div className={`w-2 h-2 rounded-full ${dotColor}`} />
-                <span className="text-gray-900">{column.title}</span>
-                <span className="text-gray-900">{count}</span>
+                <span className="text-gray-900 dark:text-gray-100">{column.title}</span>
+                <span className="text-gray-900 dark:text-gray-100">{count}</span>
               </div>
             );
           })}
@@ -291,32 +291,32 @@ export default function Board() {
           <div className="flex flex-col md:flex-row gap-2 md:gap-3 items-stretch md:items-center">
             <button 
               onClick={() => setIsColumnFormOpen(true)}
-              className="bg-indigo-600 text-white flex gap-2 items-center justify-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors md:hidden"
+              className="bg-indigo-600 dark:bg-indigo-500 text-white flex gap-2 items-center justify-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors md:hidden"
             >
               <Plus className="w-4 h-4" />
               <span>Add Item</span>
             </button>
             <button 
               onClick={() => setIsColumnFormOpen(true)}
-              className="hidden md:flex bg-indigo-600 text-white gap-2 items-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+              className="hidden md:flex bg-indigo-600 dark:bg-indigo-500 text-white gap-2 items-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors"
             >
               <Plus className="w-4 h-4" />
               <span>Add Item</span>
             </button>
             <div className="relative">
-              <Search className="absolute left-3 top-2.5 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-2.5 text-gray-400 dark:text-gray-500 w-4 h-4" />
               <input
                 type="text"
                 placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg w-full md:w-48 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm placeholder:text-gray-600 text-gray-600"
+                className="pl-9 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg w-full md:w-48 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm placeholder:text-gray-600 dark:placeholder:text-gray-400"
               />
             </div>
             <select
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value as 'all' | 'low' | 'medium' | 'high')}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white text-gray-600"
+              className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300"
             >
               <option value="all">All Priorities</option>
               <option value="high">High Priority</option>
@@ -328,7 +328,7 @@ export default function Board() {
           {/* Right - Add Task */}
           <button 
             onClick={() => openTaskForm(columns[0]?.id)}
-            className="bg-indigo-600 text-white flex gap-2 items-center justify-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+            className="bg-indigo-600 dark:bg-indigo-500 text-white flex gap-2 items-center justify-center px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span>Add Task</span>
@@ -346,8 +346,8 @@ export default function Board() {
               onClick={() => setActiveMobileColumn(col.id)}
               className={`px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap snap-center border transition-colors flex items-center gap-2 ${
                 activeMobileColumn === col.id
-                  ? 'bg-indigo-600 text-white border-indigo-600'
-                  : 'bg-white text-gray-700 border-gray-200'
+                  ? 'bg-indigo-600 dark:bg-indigo-500 text-white border-indigo-600 dark:border-indigo-500'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700'
               }`}
             >
               {col.title} ({count})
